@@ -1,0 +1,19 @@
+====== Notes ======
+
+===== About this page =====
+
+This note system is really simple.
+
+It uses jQuery for Ajax and DOM manipulation; PHP on the server side stores this data in a file: \'notes.txt\'. The data is sent and retrieved by POST.
+
+The only downside is you can\'t use it x-site because of Ajax regulations.
+
+
+===== WebDev =====
+
+* Start ColourCal again, from scratch, as a Jetpack
+
+
+===== WebLife =====
+
+* Arrange for the 000 deafening to work.
