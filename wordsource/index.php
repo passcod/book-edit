@@ -22,7 +22,7 @@ var buttClick = function() {
 		while( i < $('#no').val() )
 		{	
 			$.get('randword.php', function(data) {
-				$('#wordlist').append(data+' ');
+				$('#wordlist').append('<span>'+data+'</span> ');
 			});
 			i++;
 		}
@@ -32,6 +32,15 @@ var buttClick = function() {
 
 		<title>Word(s) Sources</title>
 		<style type="text/css">
+@font-face {
+  font-family: Tagesschrift; /* from Yanone */
+  src: url(YanoneTagesschrift.ttf);
+}
+
+body {
+	font-family: Tagesschrift, serif;
+}
+
 #button {
 	-moz-border-radius: 15px;
 	border: 2px black solid;
@@ -66,6 +75,12 @@ var buttClick = function() {
 	word-spacing: 25px;
 	line-height: 3;
 }
+#wordlist > span:hover, #wordlist > span a:hover {
+	color: grey;
+	cursor: normal;
+}
+
+a, a:hover { color: black; text-decoration: none; }
 		</style>
 	</head>
 

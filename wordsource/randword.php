@@ -32,10 +32,9 @@ function get_web_page( $url )
 $source = 'http://toolserver.org/~hippietrail/randompage.fcgi?langname=English';
 
 $file = get_web_page($source);
-file_put_contents('seed', $file['content']);
 
 $matches = array();
 $c = preg_match("/<title>(.+) - Wiktionary<\/title>/", $file['content'], $matches);
 
-echo $matches[1];
+echo "<a href='".$file['url']."' target='_blank'>".$matches[1]."</a>";
 ?>
