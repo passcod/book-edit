@@ -35,7 +35,7 @@ var buttClick = function() {
 };
 		</script>
 
-		<title>Word(s) Sources</title>
+		<title>Word(s) Source</title>
 		<style type="text/css">
 @font-face {
   font-family: Tagesschrift; /* from Yanone, CC-BY */
