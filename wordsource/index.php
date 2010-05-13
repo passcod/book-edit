@@ -17,12 +17,17 @@ var buttClick = function() {
 	if ( $('#no').val() != 0 )
 	{
 		$('#wordlist').html('');
+		$('#counter').html('0');
+		$('#wordcount').html('0');
 		
 		var i = 0;
 		while( i < $('#no').val() )
 		{	
 			$.get('randword.php', function(data) {
 				$('#wordlist').append('<span>'+data+'</span> ');
+				$('#counter').html(Number($('#counter').html())+1);
+				$('#wordcount').html($.trim($('#wordlist').text()).split(' ').length);
+				
 			});
 			i++;
 		}
@@ -33,7 +38,7 @@ var buttClick = function() {
 		<title>Word(s) Sources</title>
 		<style type="text/css">
 @font-face {
-  font-family: Tagesschrift; /* from Yanone */
+  font-family: Tagesschrift; /* from Yanone, CC-BY */
   src: url(YanoneTagesschrift.ttf);
 }
 
@@ -90,5 +95,7 @@ a, a:hover { color: black; text-decoration: none; }
 		<br />
 		<div id="wordlist">
 		</div>
+		<br />
+		<p>Fetched <span id="counter">0</span> entries. So far <span id="wordcount">0</span> words.</p>
 	</body>
 </html>
