@@ -97,5 +97,8 @@ a, a:hover { color: black; text-decoration: none; }
 		</div>
 		<br />
 		<p>Fetched <span id="counter">0</span> entries. So far <span id="wordcount">0</span> words.</p>
+<?php if  ( !in_array  ('curl', get_loaded_extensions()) ) { ?>
+		<p style="color: grey; font-size: x-small;"><i>This server does not have cURL, so you will have to wait longer to get the words. Unfortunately, you probably can't do anything about it.</i></p>
+<?php } ?>
 	</body>
 </html>
