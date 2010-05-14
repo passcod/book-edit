@@ -69,75 +69,61 @@ function get_web_page( $url )
 {
     $options = array(
         CURLOPT_RETURNTRANSFER => true,     // return web page
-        CURLOPT_HEADER         => false,    // don't return headers
+        CURLOPT_HEADER         => true,    // don't return headers
         CURLOPT_ENCODING       => "",       // handle all encodings
         CURLOPT_USERAGENT      => "spider", // who am i
         CURLOPT_AUTOREFERER    => true,     // set referer on redirect
         CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
         CURLOPT_TIMEOUT        => 120,      // timeout on response
-        CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
     );
     
-    // redirect_exec function by Pawel Antczak, improved by: achatov at google dot com, http://nz2.php.net/manual/en/function.curl-setopt.php#95943
-    function redirect_exec($ch, $curlopt_header = false) {
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $data = curl_exec($ch);
-        $info =    curl_getinfo($ch);
-        $http_code = $info['http_code'];
-        if ($http_code == 301 || $http_code == 302 || $http_code == 303) {
-            list($header) = explode("\r\n\r\n", $data, 2);
-            $matches = array();
-            preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
-            $url = trim(array_pop($matches));
-            $url_parsed = parse_url($url);
-            if (isset($url_parsed['host'])) {
-                curl_setopt($ch, CURLOPT_URL, $url);
-                return redirect_exec($ch);
-            }
-        }
-
-        elseif($http_code == 200){
-            $matches = array();
-            preg_match('/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)(.*?)[\'|"]\s*>/', strtolower($data), $matches);
-            $url = trim(array_pop($matches));
-            $url_parsed = parse_url($url);
-            if (isset($url_parsed['host'])) {
-                curl_setopt($ch, CURLOPT_URL, $url);
-                return redirect_exec($ch);
-            }
-        }
-
-        return     $info['url'];
-    }
-
     $ch      = curl_init( $url );
     curl_setopt_array( $ch, $options );
-    redirect_exec($ch);
-    $content = curl_exec( $ch );
-    $err     = curl_errno( $ch );
-    $errmsg  = curl_error( $ch );
-    $header  = curl_getinfo( $ch );
+    
+    $data = curl_exec($ch);
+    $info =    curl_getinfo($ch);
+    $http_code = $info['http_code'];
+    
+    if ($http_code == 301 || $http_code == 302 || $http_code == 303) {
+        list($header) = explode("\r\n\r\n", $data, 2);
+        
+        $matches = array();
+        preg_match('/(Location:|URI:)(.*?)\n/', $header, $matches);
+        $url = trim(array_pop($matches));
+        $url_parsed = parse_url($url);
+        
+        if (isset($url_parsed['host'])) {
+            return get_web_page($url);
+        }
+    }
+
+    elseif($http_code == 200){
+        $matches = array();
+        preg_match('/(<meta http-equiv=)(.*?)(refresh)(.*?)(url=)(.*?)[\'|"]\s*>/', strtolower($data), $matches);
+        $url = trim(array_pop($matches));
+        $url_parsed = parse_url($url);
+        
+        if (isset($url_parsed['host'])) {
+            return get_web_page($url);
+        }
+    }
+    
     curl_close( $ch );
 
-    $header['errno']   = $err;
-    $header['errmsg']  = $errmsg;
-    $header['content'] = $content;
-    return $header;
+    return $data;
 }
 
 
 $source = 'http://toolserver.org/~hippietrail/randompage.fcgi?langname=English';
-
 
 if  ( in_array  ('curl', get_loaded_extensions()) )
 {
 	$file = get_web_page($source);
 
 	$matches = array();
-	$c = preg_match("/<title>(.+) - Wiktionary<\/title>/", $file['content'], $matches);
+	$c = preg_match("/<title>(.+) - Wiktionary<\/title>/", $file, $matches);
 
-	echo "<a href='".$file['url']."' target='_blank'>".$matches[1]."</a>";
+	echo ( !empty($matches[1]) )? "<a href='".$matches[1]."' target='_blank'>".$matches[1]."</a>" : "";
 }
 else
 {
@@ -146,7 +132,7 @@ else
 	$matches = array();
 	$c = preg_match("/<title>(.+) - Wiktionary<\/title>/", $file, $matches);
 
-	echo "<a href='"."http://en.wiktionary.org/wiki/".$matches[1]."?rndlangcached=yes&rndlang=English#English"."' target='_blank'>".$matches[1]."</a>";
+	echo ( !empty($matches[1]) )? "<a href='".$matches[1]."' target='_blank'>".$matches[1]."</a>" : "";
 }
 
 ?>
