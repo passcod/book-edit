@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://lib/?_=jquery.js|processing.min.js|processing.init.js"></script>
+		<title>Processing.js</title>
+		<script type="text/javascript">
+			$(function() {
+				var bgColor = { r: 202, g: 0, b:49 };
+				$('body').css('background-color', 'rgb('+bgColor.r+', '+bgColor.g+', '+bgColor.b+')');
+				$('body').data('bg', bgColor);
+				$('#ctrl').height($(window).height()*0.8);
+				
+				$('#ctrl-dy-minus').click(d2yM);
+				$('#ctrl-dy-plus').click(d2yP);
+				$('#ctrl-dx-minus').click(d2xM);
+				$('#ctrl-dx-plus').click(d2xP);
+			});
+			
+			function d2yM()
+			{
+				$('#ctrl-dy').val( Number($('#ctrl-dy').val()) -1 );
+			}
+			function d2yP()
+			{
+				$('#ctrl-dy').val( Number($('#ctrl-dy').val()) + 1 );
+			}
+			function d2xM()
+			{
+				$('#ctrl-dx').val( Number($('#ctrl-dx').val()) -1 );
+			}
+			function d2xP()
+			{
+				$('#ctrl-dx').val( Number($('#ctrl-dx').val()) + 1 );
+			}
+		</script>
+		<style type="text/css">
+			body {
+				font-family: sans;
+			}
+			
+			#ctrl {
+				float: right;
+				border: 2px white dashed;
+				width: 15%;
+				color: white;
+				padding: 10px;
+			}
+			
+			#ctrl-dy, #ctrl-dx {
+				width: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script type="application/processing" target="procing">
+			int height = $(window).height()*0.9;
+			int width = $(window).width()*0.8;
+			void setup() 
+			{
+				size(width, height);  // Size should be the first statement
+				stroke(255);     // Set line drawing color to white
+				frameRate(30);
+			}
+			
+			float y = height/2;
+			float dy = Number( $('#ctrl-dy').val() );
+			
+			float x = width/2;
+			float dx = Number( $('#ctrl-dx').val() );
+			void draw()
+			{ 
+				int red = $('body').data('bg').r;
+				int green = $('body').data('bg').g;
+				int blue = $('body').data('bg').b;
+				background(red, green, blue);
+				
+				line(0, 0,  width-1, 0);
+				line(0, height-1,  width-1, height-1);
+				line(0, 0,  0, height-1);
+				line(width-1, 0,  width-1, height-1);				
+				
+				refDs();
+				
+				if ( dy != Number( $('#ctrl-dy').val() ) && 0-dy != Number( $('#ctrl-dy').val() ) )
+				{
+					dy = Number( $('#ctrl-dy').val() );
+				}
+				else if ( 0-dy == Number( $('#ctrl-dy').val() ) )
+				{
+					Number( $('#ctrl-dy').val(dy) );
+				}
+				
+				if ( dx != Number( $('#ctrl-dx').val() ) && 0-dx != Number( $('#ctrl-dx').val() ) )
+				{
+					dx = Number( $('#ctrl-dx').val() );
+				}
+				else if ( 0-dx == Number( $('#ctrl-dx').val() ) )
+				{
+					Number( $('#ctrl-dx').val(dx) );
+				}
+				
+				y = y + dy;
+				if (y < 0 || y > height) { dy = -dy; }
+				line(0, y,  width, y);
+				
+				x = x + dx;
+				if (x < 0 || x > width) { dx = -dx; }
+				line(x, 0,  x, height);
+				
+				ellipse(x, y, 5, 5);
+				$('#ctrl-coor').text(parseInt(x)+', '+parseInt(y));
+			}
+			
+			void refDs()
+			{
+				if ( Number($('#ctrl-dy').val()) != Number($('#ctrl-dy-view').text()) )
+				{
+					$('#ctrl-dy-view').text( $('#ctrl-dy').val() );
+				}
+				
+				if ( Number($('#ctrl-dx').val()) != Number($('#ctrl-dx-view').text()) )
+				{
+					$('#ctrl-dx-view').text( $('#ctrl-dx').val() );
+				}
+			}
+		</script>
+		<canvas id="procing"></canvas>
+		<div id="ctrl">
+			<p>dy: <input type="hidden" id="ctrl-dy" value="1" />
+				<span id="ctrl-dy-view">1</span>
+				<button id="ctrl-dy-minus"> - </button>
+				<button id="ctrl-dy-plus"> + </button>
+			</p>
+			<p>dx: <input type="hidden" id="ctrl-dx" value="1" />
+				<span id="ctrl-dx-view">1</span>
+				<button id="ctrl-dx-minus"> - </button>
+				<button id="ctrl-dx-plus"> + </button>
+			</p>
+			<ul><li>(<span id="ctrl-coor">0, 0</span>)</li></ul>
+		</div>
+	</body>
+</html>

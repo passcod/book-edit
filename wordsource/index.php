@@ -27,7 +27,6 @@ var buttClick = function() {
 				$('#wordlist').append('<span>'+data+'</span> ');
 				$('#counter').html(Number($('#counter').html())+1);
 				$('#wordcount').html($.trim($('#wordlist').text()).split(' ').length);
-				
 			});
 			i++;
 		}
