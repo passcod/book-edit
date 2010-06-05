@@ -17,7 +17,9 @@
 					for( i in files ) {
 						$('#filelist').append('<li><a>'+files[i]+'</a></li>');
 					}
-					$('#filelist a').click(editMe);
+					$.getScript('showdown.js', function() {
+						$('#filelist a').click(editMe);
+					});
 				});
 				
 				$('#back').click(function() {
@@ -29,14 +31,14 @@
 			});
 			
 			function editMe() {
+				var mark = new Showdown.converter();
 				var file = $(this).text();
 				$('#editor').data('file', file);
 				$.get('file.php?g=raw&f='+file, function(data) {
 					$('#menu').hide();
 					$('#edittext').height( $(window).height() * 0.8 ).val(data);
-					$.get('file.php?g=htm&f='+file, function(data) {
-						$('#editview').html(data);
-					});
+					$('#edittext').keyup(viewMe);
+					$('#editview').html( mark.makeHtml(data) );
 					$('#editor').show();
 				});
 			}
@@ -47,11 +49,14 @@
 					{ data: $('#edittext').val() },
 					function(data) {
 						$('#status').text('Written '+data+' bytes.');
-						$.get('file.php?g=htm&f='+file, function(data) {
-							$('#editview').html(data);
-						});
 					}
 				);
+			}
+			
+			function viewMe() {
+				var mark = new Showdown.converter();
+				var md = $('#edittext').val();
+				$('#editview').html( mark.makeHtml(md) );
 			}
 		</script>
 		<style type="text/css">
@@ -110,7 +115,7 @@
 				<p><span id="status">Ready</span><a id="back" style="float: right;">Back</a></p>
 				<textarea id="edittext"></textarea>
 				<br />
-				<p><button id="save">Save & Preview</button></p>
+				<p><button id="save">Save</button></p>
 				<hr />
 				<br />
 				<div id="editview"></div>
