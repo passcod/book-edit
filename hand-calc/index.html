@@ -1,0 +1,242 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://lib/?_=jquery.js"></script>
+		<script type="text/javascript">
+			var i;
+			
+			$(function() {
+				$('#js').show();
+				$('#nojs').hide();
+				
+				$('#opt').click(changeOpt);
+				$('#run').click(calculate);
+			});
+			
+			function calculate() {
+				var cas = Number($('#opt').val());
+				
+				var in1 = $('#in1').val();
+				var in2 = $('#in2').val();
+				
+				$('#digin1').text(in1.length);
+				$('#digin2').text(in2.length);
+				
+				var fin;
+				
+				if ( cas == 0 ) {					
+					fin = newAdd(in1, in2);
+				} else if ( cas == 1 ) {
+					fin = newSubstr(in1, in2);
+				} else if ( cas == 2 ) {
+					fin = newTimes(in1, in2);
+				} else if ( cas == 3 ) {
+					fin = newDiv(in1, in2);
+				}
+				
+				if ( fin != 0 ) {
+					fin  = fin.replace(/^0+/i, '');
+				} else { fin = '0'; }
+				
+				$('#out').text(fin);
+				$('#digout').text(fin.length);
+			}
+			
+			function changeOpt() {
+				var ops = [
+					'+',
+					'-',
+					'x',
+					'/'
+				];
+				
+				var opt = Number($('#opt').val());
+				if ( (opt + 1) > (ops.length - 1) ) {
+					$('#opt').val(0);
+					$('#opt').html( ops[0] );
+				} else {
+					$('#opt').val(opt+1);
+					$('#opt').html( ops[opt+1] );
+				}
+			}
+			
+			function newDiv(in1, in2) {
+				return 'Not yet';
+			}
+			
+			function newTimes(in1, in2) {
+				var i, dig, div, fin;
+		
+				var num1 = arrRev( in1.split('') );
+				var num2 = arrRev( in2.split('') );
+				
+				/*
+				
+				if ( num1.length < num2.length ) {
+					var diff = num2.length - num1.length;
+	
+					i = 0;
+					while ( i < diff ) {
+						num1.push('0');
+						i++;
+					}
+				} else if ( num1.length > num2.length ) {
+					var diff = num1.length - num2.length;
+	
+					i = 0;
+					while ( i < diff ) {
+						num2.push('0');
+						i++;
+					}
+				}
+				
+				*/
+				
+				////////
+			
+				var res = [];
+				var ret, dig, div, ln, fn;
+			
+				for ( j in num2 ) {
+					i = 0;
+					ret = 0;
+					res[j] = [];
+				
+					while ( i < num1.length ) {
+						dig = ( Number(num2[j]) * Number(num1[i]) ) + ret; 
+					
+						if ( dig >= 10 ) {
+							div = divRest(dig, 10);
+							ret = div[0];
+							dig = div[1];
+						} else { ret = 0; }
+					
+						res[j].push(dig);
+					
+						i++;
+					}
+				}
+				
+				console.log(res);
+				
+				i = 0; j = 0;
+				fin = '';
+				for ( i in res ) {
+					ln = arrRev( res[i] );
+					fn = '';
+				
+					j = 0;
+					while ( j != i ) {
+						ln.push('0');
+					
+						j++;
+					} j = 0;
+				
+					for ( j in ln ) {
+						fn = fn + ln[j] + '';
+					}
+				
+					res[i] = fn;
+				} i = 0;
+				
+				console.log(res);
+				
+				for ( i in res ) {
+					if ( i != 0 ) {
+						res[i] = newAdd( res[i-1], res[i] );
+					}
+				}
+				
+				console.log(res);
+				
+				fin = res[ res.length -1 ];
+			
+				return fin;
+			}
+			
+			function newSubstr(in1, in2) {
+				return 'Not yet';
+			}
+			
+			function newAdd(in1, in2) {
+				var i, dig, div, fin;
+				
+				var num1 = arrRev( in1.split('') );
+				var num2 = arrRev( in2.split('') );
+		
+				if ( num1.length < num2.length ) {
+					var diff = num2.length - num1.length;
+			
+					i = 0;
+					while ( i < diff ) {
+						num1.push('0');
+						i++;
+					}
+				} else if ( num1.length > num2.length ) {
+					var diff = num1.length - num2.length;
+			
+					i = 0;
+					while ( i < diff ) {
+						num2.push('0');
+						i++;
+					}
+				}
+			
+				//////////
+			
+				i = 0;
+				var res = [];
+				var ret = 0;
+
+				while ( i < num1.length ) {
+					dig = Number(num1[i]) + Number(num2[i]) + ret;
+					if ( dig > 9 ) {
+						div = divRest(dig, 10);
+						dig = div[1];
+						ret = div[0];
+					} else { ret = 0; }
+				
+					res.push(dig);
+					i++;
+				}
+				
+				res.push(ret);
+				
+				res = arrRev(res);
+				
+				i = 0;
+				fin = '';
+				for ( i in res ) {
+					fin = fin + res[i] + '';
+				}
+				
+				return fin;
+			}
+			
+			function divRest(a, b) {
+				var s = String(a/b);
+				var c = Number(s.replace(/\..*$/i, ''));
+				var r = Number(a-(c*b));
+				return [c, r];
+			}
+			
+			function arrRev(arr) {
+				arr.reverse();
+				return arr;
+			}
+		</script>
+
+		<title></title>
+	</head>
+
+	<body>
+		<div id="js" style="display: none;">
+			<input id="in1" value="0" /> <button id="opt" value="0">+</button> <input id="in2" value="0" />
+			<p style="color: grey;"><span id="digin1">1</span> | <span id="digin2">1</span></p>
+			<p><button id="run">Calculate</button></p>
+			<div> = <span id="out">0</span></div>
+			<br />
+			<div style="color: grey;">No of digits of result: <span id="digout">1</span></div>
+		</div>
+		<div id="nojs">You need js enabled!</div>
+	</body>
+</html>
