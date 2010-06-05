@@ -1,0 +1,42 @@
+/* Diavlo, A font by Jos Buivenga (exljbris) -> www.exljbris.com */
+@font-face {
+	font-family: "Diavlo Bold";
+	src: local("Diavlo Bold"),
+	url(Diavlo_BOLD_II_37.otf);
+	font-weight: bold;
+}
+@font-face {
+	font-family: "Diavlo";
+	src: local("Diavlo Book"),
+	url(Diavlo_BOOK_II_37.otf);
+}
+
+* {
+	font-family: "Diavlo", sans-serif;
+	color: black;
+}
+b, strong, h1 {
+	font-family: "Diavlo Bold", sans-serif;
+	font-weight: bold;
+}
+
+h3 {
+	text-align: right;
+}
+
+a, a:visited {
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+
+#container {
+	width: 500px;
+	margin: 0 auto;
+	border: 2em #eee solid;
+	border-radius: 1em;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	padding: 0.5em;
+}
