@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://lib/?_=jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('#in1, #in2').click(addThis);
+			});
+			var addThis = function() {
+				alert( Number($('#in1').val()) + Number($('#in2').val()) );
+			};
+		</script>
+
+		<title>M. P.</title>
+	</head>
+
+	<body>
+		<input type="text" value="0" id="in1"> + <input type="text" value="0" id="in2">
+	</body>
+</html>
