@@ -33,7 +33,7 @@
 				$('#editor').data('file', file);
 				$.get('file.php?g=raw&f='+file, function(data) {
 					$('#menu').hide();
-					$('#edittext').height( $(window).height() * 0.8 ).html(data);
+					$('#edittext').height( $(window).height() * 0.8 ).val(data);
 					$.get('file.php?g=htm&f='+file, function(data) {
 						$('#editview').html(data);
 					});
