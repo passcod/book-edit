@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://lib/?_=jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('.inputs').keyup(change).css({ 'background-color': 'transparent', color: 'white', border: '0px', width: '35px' });
+				$('#inr').val('00');
+				$('#ing').val('00');
+				$('#inb').val('00');
+				$('body').css({ color: 'white', 'background-color': '#000000' });
+			});
+			
+			function change() {
+				$('body').css('background-color', '#'+$('#inr').val()+$('#ing').val()+$('#inb').val());
+			}
+		</script>
+
+		<title>Color</title>
+	</head>
+
+	<body>
+		R: <input id="inr" class="inputs" /> 
+		G: <input id="ing" class="inputs" /> 
+		B: <input id="inb" class="inputs" /> 
+	</body>
+</html>
