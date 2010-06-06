@@ -2,6 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
+		<link href="favicon.png" rel="shortcut icon" />
 		<script type="text/javascript" src="http://lib/?_=jquery.js"></script>
 		<script type="text/javascript">
 			$(function() {
